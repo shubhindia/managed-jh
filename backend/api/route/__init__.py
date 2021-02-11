@@ -28,10 +28,11 @@ def dashboard():
 @api_v1.route('/create_jh_instance', methods=['POST'])
 def create_jh_instance():
 
-    client = docker.DockerClient(base_url='tcp://127.0.0.1:2375')
+    #client = docker.DockerClient(base_url='tcp://127.0.0.1:2375')
+    client = docker.from_env()
     request_data = request.get_json()
     name = request_data['name']
-    base_dir = '/home/shubhcyanogen/Work/RND/managed-jh-instances'
+    base_dir = '/root/managed-jh-instances/'
     user_dir = name
     dir_path = os.path.join(base_dir, user_dir)
     mode = 0o777
@@ -44,12 +45,12 @@ def create_jh_instance():
 
     volumes = {path:{'bind': '/home/jovyan/work', 'mode': 'rw'}}
     container = client.containers.run('jupyter/scipy-notebook',detach=True, publish_all_ports=True,
-                                    volumes=volumes, name=instance_name)
+                                      name=instance_name)
 
     for n,line in enumerate(container.logs(stream=True)):
         print(n)
         print(line.strip())
-        if n == 15:
+        if n == 12:
 
             token_url = line.strip()
             break
@@ -61,7 +62,7 @@ def create_jh_instance():
 
     port = container.__dict__['attrs']['NetworkSettings']['Ports']['8888/tcp'][0]['HostPort']
 
-    url = 'localhost:' + port + '/?token=' + jh_token
+    url = '161.97.134.79:' + port + '/?token=' + jh_token
 
     res = {"instance_url": url}
     return json.dumps(res)
