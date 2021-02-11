@@ -9,7 +9,6 @@ print(volumes)
 container = client.containers.run('jupyter/scipy-notebook',detach=True, publish_all_ports=True,
                                     volumes=volumes, name=container_name)
 
-i = 0
 for n,line in enumerate(container.logs(stream=True)):
     print(n)
     if n == 20:
