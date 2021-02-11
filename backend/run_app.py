@@ -8,11 +8,7 @@ import requests
 from pymongo import MongoClient
 from api.route import api_v1
 
-
-
 import logging
-
-
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -20,11 +16,5 @@ app.config["DEBUG"] = True
 app.register_blueprint(api_v1)
 
 
-
-
-
-
 if __name__ == '__main__':
-    from api.route import api_v1
-    app.register_blueprint(api_v1)
     app.run(host='0.0.0.0', port=8080, debug=True)
